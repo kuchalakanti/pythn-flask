@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Directory</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; }
+        input { padding: 8px; width: 300px; }
+        button { padding: 8px 16px; background: #007bff; color: white; border: none; cursor: pointer; }
+        ul { margin-top: 20px; }
+        li { padding: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>Employee Directory</h1>
+
+    <div>
+        <input type="text" id="employeeName" placeholder="Enter employee name" />
+        <button onclick="addEmployee()">Add Employee</button>
+    </div>
+
+    <h2>Employee List</h2>
+    <ul id="employeeList"></ul>
+
+    <script>
+        async function loadEmployees() {
+            const response = await fetch('/employees');
+            const employees = await response.json();
+            const list = document.getElementById('employeeList');
+            list.innerHTML = '';
+            employees.forEach(emp => {
+                const li = document.createElement('li');
+                li.textContent = emp.name;
+                list.appendChild(li);
+            });
+        }
+
+        async function addEmployee() {
+            const nameInput = document.getElementById('employeeName');
+            const name = nameInput.value.trim();
+            if (!name) {
+                alert('Please enter a name');
+                return;
+            }
+            await fetch('/employees', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name })
+            });
+            nameInput.value = '';
+            loadEmployees();
+        }
+
+        // Load on page start
+        loadEmployees();
+    </script>
+</body>
+</html>
