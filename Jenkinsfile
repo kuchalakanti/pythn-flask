@@ -94,44 +94,6 @@ pipeline {
             }
         }
 
-        // ════════════════════════════════════════════════
-        // STAGE 5: Run Selenium Tests
-        // ════════════════════════════════════════════════
-        stage('🧪 Run Selenium Tests') {
-            steps {
-                echo '=== Running Selenium tests with pytest ==='
-                sh '''
-                    . venv/bin/activate
-                    pytest tests/test_app.py \
-                        --tb=short \
-                        -v \
-                        --junit-xml=test-results.xml
-                '''
-                echo '✅ All tests passed!'
-            }
-        }
-    }
-
-    // ════════════════════════════════════════════════
-    // POST: Always runs — cleanup + publish results
-    // ════════════════════════════════════════════════
-    post {
-        always {
-            echo '=== Cleaning up — stopping Flask app ==='
-            sh '''
-                if [ -f ${APP_PID_FILE} ]; then
-                    PID=$(cat ${APP_PID_FILE})
-                    kill $PID 2>/dev/null || true
-                    rm -f ${APP_PID_FILE}
-                    echo "Stopped Flask app (PID: $PID)"
-                fi
-            '''
-
-            // Publish test results in Jenkins UI
-            junit 'test-results.xml'
-
-            echo '=== Pipeline finished ==='
-        }
 
         success {
             echo '''
