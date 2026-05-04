@@ -28,7 +28,8 @@ pipeline {
             steps {
                 echo '=== Setting up Python virtual environment ==='
                 sh '''
-                    python3 -m venv venv
+                    sudo apt install python3.12-venv
+                    python3.12 -m venv venv
                     . venv/bin/activate
                     pip install --upgrade pip
                     pip install -r requirements.txt
