@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // ✅ Change this to your actual VM IP
-        VM_IP   = "10.1.1.61"
+        VM_IP   = ""10.0.0.4""
         VM_PORT = "5000"
         APP_PID_FILE = "app.pid"
     }
